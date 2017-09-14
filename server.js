@@ -8,10 +8,12 @@ const app = express()
 let port = process.env.PORT || 8081
 app.use(express.static(path.join(__dirname+'/client')))
 
+
+
 app.get('/',(req,res)=>{
 
-    console.log(" index.html called")    
-    res.sendFile("client/index.html")
+      
+    res.sendFile(__dirname+"client/index.html")
 
 })
 
@@ -25,6 +27,11 @@ app.get('/map',(req,res)=>{
     res.sendFile(__dirname+"/client/views/map.html")
          
                       
+})
+
+app.get('/shopping',(request,response)=>{
+   
+    response.sendFile(__dirname+"/client/views/shopMain.html")
 })
 
 

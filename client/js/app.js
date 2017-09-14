@@ -25,13 +25,72 @@
 
 
 
-        var app =  angular.module('firstApplication', ['ngRoute','ngAnimate','ngAria','ngMaterial','ngRoute','firebase','ngMessages'])
+        var app =  angular.module('firstApplication', ['ngAnimate','ngAria','ngMaterial','firebase','ngMessages'])
                  
          app.controller('myctrl',['$scope','$log','$firebaseObject','$firebaseArray','$mdSidenav','$mdDialog','$mdToast','$timeout','$rootScope',
          ($scope,$log,$firebaseObject,$firebaseArray,$mdSidenav,$mdDialog,$mdToast,$timeout,$rootScope)=>{
 
              $scope.dev = " daxesh mehra" 
+            $rootScope.cart = []
 
+             $scope.addToCart = (productName,productPrice,size,color,quantity)=>{
+
+                    let itemToAdd = {
+
+                        "productName":productName,
+                        "productPrice":productPrice,
+                        "size":size,
+                        "color":color,
+                        "quantity":quantity
+
+                    }
+                            // $log.info(JSON.stringify(itemToAdd)) 
+                  if(isNaN(itemToAdd.quantity ))
+                  {
+                      itemToAdd.quantity = 1
+                  }          
+
+                $rootScope.cart.push(itemToAdd)
+                $log.info(JSON.stringify($rootScope.cart)) 
+
+                $scope.loginToast("item added to cart") 
+             }
+
+             $scope.removeItem = (index)=>{
+
+                //  let index = $rootScope.cart.indexOf(item)
+                 $rootScope.cart.splice(index, 1)
+                 $scope.loginToast("item removed from cart") 
+             }
+
+             $scope.showOrders = ()=>{
+
+                 $scope.showOrder = ! $scope.showOrder
+
+                 if($rootScope.cart)
+                 {
+                     $scope.cartStatus = $rootScope.cart.length
+                     
+                 }
+                 else
+                 {
+                     $scope.cartStatus = "empty"
+                 }
+                 
+                 let getTotal = ()=>{
+
+                     $scope.cartTotal = 0
+                    $rootScope.cart.forEach((item,index)=>{
+                        
+                        $scope.cartTotal = $scope.cartTotal + ( item.quantity * item.productPrice )
+
+                    })
+                    $log.info($scope.cartTotal)
+                 }
+                 
+                 getTotal()
+                }
+            
 
              let updateViews=()=>{
 
@@ -751,6 +810,58 @@ app.directive("likes",function(){
     }
 })
 
+app.directive("shopMain",function(){
+
+      return {
+
+         restrict:"ACE",
+       templateUrl:"views/shopMain.html"
+     // controller:"viewsCtrl"
+        
+    }
+})
+app.directive("orders",function(){
+
+      return {
+
+         restrict:"ACE",
+       templateUrl:"views/orders.html"
+     // controller:"viewsCtrl"
+        
+    }
+})
+app.directive("jeans",function(){
+
+      return {
+
+         restrict:"ACE",
+       templateUrl:"views/jeans.html"
+     // controller:"viewsCtrl"
+        
+    }
+})
+
+app.directive("shopContactUs",function(){
+
+      return {
+
+         restrict:"ACE",
+       templateUrl:"views/contact.html"
+     // controller:"viewsCtrl"
+        
+    }
+})
+
+app.directive("newsLetter",function(){
+
+      return {
+
+         restrict:"ACE",
+       templateUrl:"views/newsLetter.html"
+     // controller:"viewsCtrl"
+        
+    }
+})
 app.controller('mapCtrl', function($scope) {
       
        $scope.initialize = function() {
